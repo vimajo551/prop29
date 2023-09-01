@@ -19,7 +19,6 @@ var backgroundImage;
 
 var stones = [];
 var collided = false;
-
 function preload() {
   zombie1 = loadImage("./assets/zombie1.png");
   zombie2 = loadImage("./assets/zombie2.png");
@@ -62,13 +61,10 @@ function setup() {
   zombie.scale = 0.1;
   zombie.velocityX = 10;
 
-  breakButton = createButton("BOTÃO");
+  breakButton = createButton("");
   breakButton.position(width - 200, height / 2 - 50);
   breakButton.class("breakbutton");
-  breakButton.mouseClicked(handleButtonPress);
-  //breakButton.mousePressed(handleButtonPress);
-  //breakButton.mouse(handleButtonPress);
-  //breakButton.mousePressed(ButtonPress);
+  breakButton.mousePressed(handleButtonPress);
 }
 
 function draw() {
@@ -79,25 +75,58 @@ function draw() {
 
   for (var stone of stones) {
     stone.show();
+    var pos = stone.body.position;
+    
+    var distance = dist(zombie.position.x, zombie.position.y, pos.x, pos.y);
+    //var distance = dist(zombie.position.x, zombie.position.y);
+    //var distance = dist(pos.x, pos.y);
+    //var distance = dist(zombie, pos);
+
+
+    /*if (distance >= 50) {
+      zombie.velocityX = 0;
+      Matter.Body.setVelocity(stone.body, { x: 10, y: -10 });
+      zombie.changeImage("sad");
+      collided = true;
+    }*/
+
+    /*if (distance <= 50) {
+      zombie.velocityX = 0;
+      Matter.Body.setVelocity(stone.body, { x: 10, y: -10 });
+      zombie.Image("sad");
+      collided = true;
+    }*/
+
+    if (distance <= 50) {
+      zombie.velocityX = 0;
+      Matter.Body.setVelocity(stone.body, { x: 10, y: -10 });
+      zombie.changeImage("sad");
+      collided = true;
+    }
+
+    /*if (distance <= 50) {
+      zombie.velocityX = 0;
+      Matter.Body.Velocity(stone.body, { x: 10, y: -10 });
+      zombie.changeImage("sad");
+      collided = true;
+    }*/
+
   }
+
+  if (zombie.position.x >= width - 300 && !collided) {
+    zombie.velocityX = -10;
+    zombie.changeAnimation("righttoleft");
+  }
+
+  if (zombie.position.x <= 300 && !collided) {
+    zombie.velocityX = 10;
+    zombie.changeAnimation("lefttoright");
+  }
+
+  drawSprites();
 }
 
 function handleButtonPress() {
-  /*jointLink=dettach();
-  setTimeout(() => {
-    bridge.break();
-  }, 1500);*/
-
-  /*jointLink.dettach();
-  setTimeout(() => {
-    break();
-  }, 1500);*/
-
-  /*jointLink.dettach();
-  setTimeout(() => {
-    bridge.break();
-  }, 5);*/
-
   jointLink.dettach();
   setTimeout(() => {
     bridge.break();
